@@ -27,6 +27,7 @@ class SearchRequest:
     Status: Optional[str] = None      
     CFDA_number: Optional[str] = None   
     summary: Optional[str] = None 
+    title: Optional[str] = None 
     published_date: Optional[str] = None 
     changed_date: Optional[str] = None 
 
@@ -140,6 +141,7 @@ def has_filters(search_request: SearchRequest) -> bool:
         search_request.Status,
         search_request.CFDA_number,
         search_request.summary,
+        search_request.title,
         search_request.published_date,
         search_request.changed_date,
     ])
@@ -200,6 +202,10 @@ def build_filter_string(search_request: SearchRequest) -> Optional[str]:
     if search_request.CFDA_number:
         filters.append(f"CFDA_number eq '{search_request.CFDA_number}'")
         logging.info(f"CFDA_number filter: CFDA_number eq '{search_request.CFDA_number}'")
+
+    if search_request.title:
+            filters.append(f"title eq '{search_request.title}'")
+            logging.info(f"title filter: title eq '{search_request.title}'")
 
     if search_request.published_date:
             filters.append(f"published_date eq '{search_request.published_date}'")
@@ -448,6 +454,7 @@ def search_function(req: func.HttpRequest) -> func.HttpResponse:
             Status=request_body.get('Status'),        
             CFDA_number=request_body.get('CFDA_number'),
             summary=request_body.get('summary'),
+            title=request_body.get('title'),
             published_date=request_body.get('published_date'),
             changed_date=request_body.get('changed_date')
         )
@@ -487,6 +494,7 @@ def search_function(req: func.HttpRequest) -> func.HttpResponse:
                 "Status",
                 "CFDA_number",
                 "summary",
+                "title",
                 "published_date",
                 "changed_date"
             ],
@@ -531,6 +539,7 @@ def search_function(req: func.HttpRequest) -> func.HttpResponse:
                     'Status': result.get('Status', ''),
                     'CFDA_number': result.get('CFDA_number', ''),
                     'summary': result.get('summary', ''),
+                    'title': result.get('title', ''),
                     'published_date': result.get('published_date', ''),
                     'changed_date': result.get('changed_date', '')
                 }
@@ -616,6 +625,7 @@ def search_function(req: func.HttpRequest) -> func.HttpResponse:
                 "Status": search_request.Status,
                 "CFDA_number": search_request.CFDA_number,
                 "summary": search_request.summary,
+                "title": search_request.title,
                 "published_date": search_request.published_date,
                 "changed_date": search_request.changed_date
             }
