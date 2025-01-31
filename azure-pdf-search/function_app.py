@@ -105,16 +105,13 @@ def search_function(req: func.HttpRequest) -> func.HttpResponse:
                 status_code=400,
                 mimetype="application/json"
             )
-
-        # Initialize clients
-        search_endpoint = os.getenv("SEARCH_ENDPOINT")
-        search_key = os.getenv("SEARCH_KEY")
-        index_name = os.getenv("INDEX_NAME", "pdf-search-index")  # Updated default index name
+            
+        search_endpoint = os.getenv("SEARCH_SERVICE_ENDPOINT")
+        search_key = os.getenv("SEARCH_SERVICE_API_KEY")
+        index_name = os.getenv("SECONDARY_SEARCH_INDEX_NAME", "pdf-search-index")  # Updated default index name
         
         if not all([search_endpoint, search_key, index_name]):
             raise ValueError("Missing required environment variables: SEARCH_ENDPOINT, SEARCH_KEY, or INDEX_NAME")
-
-        logging.info(f"Using index: '{index_name}'")
 
         # Initialize search client
         search_credential = AzureKeyCredential(search_key)
